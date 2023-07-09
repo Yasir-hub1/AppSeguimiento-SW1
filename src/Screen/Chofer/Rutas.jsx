@@ -2,13 +2,15 @@ import React, {
     useState,
     useEffect
 } from 'react';
-import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
+import { View, Text, RefreshControl, StyleSheet, FlatList } from 'react-native';
 import { Button, CheckBox } from 'react-native-elements';
 import { listaRutas } from '../../Services/AuthService';
+import { showToast } from '../../Components/funciones';
 
-const Rutas = ({navigation}) => {
+const Rutas = ({ navigation }) => {
     const [obtenerRutas, setobtenerRutas] = useState([])
     const [dataRuta, setDataRuta] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
 
     async function obtenerListaDeRutas() {
@@ -20,6 +22,23 @@ const Rutas = ({navigation}) => {
     useEffect(() => {
         obtenerListaDeRutas();
     }, [])
+
+
+    //Actualiza la lista de los CAMIONES
+    const onRefresh = async () => {
+        setRefreshing(true);
+        showToast("Cargando...", "#2ecc71")
+
+        try {
+            const listRutas = await listaRutas();
+            setobtenerRutas(listRutas);
+           
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setRefreshing(false);
+        }
+    };
 
     const [checkRuta, setcheckRuta] = useState(null);
 
@@ -48,7 +67,7 @@ const Rutas = ({navigation}) => {
 
                     <CheckBox
                         checked={checkRuta === item.id}
-                        onPress={() => {toggleCheckBox(item);setDataRuta(item)}}
+                        onPress={() => { toggleCheckBox(item); setDataRuta(item) }}
                         center={true}
                     />
 
@@ -60,7 +79,7 @@ const Rutas = ({navigation}) => {
     renderItemSeparator = ({ item }) => (
         <View style={styles.separatorContainer}>
             <View style={styles.timelineLine}></View>
-            
+
         </View>
     )
 
@@ -73,6 +92,9 @@ const Rutas = ({navigation}) => {
                     contentContainerStyle={{ paddingHorizontal: 16 }}
                     ItemSeparatorComponent={renderItemSeparator}
                     data={obtenerRutas}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                      }
                     renderItem={renderClassItem}
                     keyExtractor={(item, index) => index.toString()}
                 />
@@ -81,7 +103,7 @@ const Rutas = ({navigation}) => {
 
                     title="Enviar"
                     buttonStyle={{ backgroundColor: "#00b894", alignSelf: "center", width: "80%", height: 50, bottom: 10 }}
-                    onPress={()=>navigation.navigate("Mapa",{id_ruta:checkRuta,dataRuta:dataRuta})}
+                    onPress={() => navigation.navigate("Mapa", { id_ruta: checkRuta, dataRuta: dataRuta })}
                 />
             </View>
 
@@ -95,7 +117,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 50,
-        backgroundColor:"#fff"
+        backgroundColor: "#fff"
 
     },
     title: {
@@ -103,7 +125,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 16,
         marginLeft: 16,
-        color:"#00b894"
+        color: "#00b894"
     },
     card: {
         flex: 1,
@@ -141,7 +163,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-      
+
     },
     timelineContainer: {
         width: 30,

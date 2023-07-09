@@ -10,13 +10,15 @@ import {
   Alert,
   TextInput,
   FlatList,
+  RefreshControl
 } from 'react-native'
 import { Button, CheckBox } from 'react-native-elements';
 import { showToast } from '../funciones';
 
-const ListaDeEmpleados = ({ navigation,setEmpleadosSeleccionados }) => {
+const ListaDeEmpleados = ({ navigation, setEmpleadosSeleccionados }) => {
   const [obtenerEmpleado, setObtenerEmpleado] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
 
   const toggleCheckBox = (item) => {
@@ -42,21 +44,23 @@ const ListaDeEmpleados = ({ navigation,setEmpleadosSeleccionados }) => {
     }
   }
 
+
+
   const onbtenerEmpleadosSeleccionados = () => {
 
-   
-      const checkboxesSeleccionados = checkedItems
+
+    const checkboxesSeleccionados = checkedItems
       .filter((item) => item.isChecked)
       .map((item) => item.id);
     // Hacer la solicitud HTTP a la API con los IDs de los checkboxes seleccionados
-       if(checkboxesSeleccionados.length>0){
-         setEmpleadosSeleccionados(checkboxesSeleccionados);
+    if (checkboxesSeleccionados.length > 0) {
+      setEmpleadosSeleccionados(checkboxesSeleccionados);
 
-       }else{
-        showToast("Por favor elige al menos un empleado","#ff7f50")
-       }
+    } else {
+      showToast("Por favor elige al menos un empleado", "#ff7f50")
+    }
     console.log('IDs de checkboxes', checkboxesSeleccionados);
-   
+
 
   };
 
@@ -71,11 +75,27 @@ const ListaDeEmpleados = ({ navigation,setEmpleadosSeleccionados }) => {
     navigation.setOptions({
       headerTitle: () => (
         <View>
-          <Text style={{fontSize:22,fontWeight:"700",color:"#00b894"}}>Empleados</Text>
+          <Text style={{ fontSize: 22, fontWeight: "700", color: "#00b894" }}>Empleados</Text>
         </View>
       ),
     });
   }, [navigation]);
+
+  //Actualiza la lista de los empleados
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      const listEmpleados = await listaEmpleados();
+      showToast("Cargando...", "#2ecc71")
+      const empleadosConChecked = listEmpleados.map((empleado) => ({ ...empleado, isChecked: false }));
+      setObtenerEmpleado(empleadosConChecked);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
 
   return (
@@ -84,6 +104,9 @@ const ListaDeEmpleados = ({ navigation,setEmpleadosSeleccionados }) => {
       <FlatList
         style={styles.notificationList}
         data={obtenerEmpleado}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         keyExtractor={item => {
           return item.id
         }}
@@ -128,19 +151,19 @@ const ListaDeEmpleados = ({ navigation,setEmpleadosSeleccionados }) => {
           )
         }}
       />
-      {checkedItems && checkedItems.length>0?
-      (
-      <View style={{ alignSelf: "center", width: "80%", bottom: 10 }}>
-        <Button
-          title="Guardar Equipo"
-          onPress={onbtenerEmpleadosSeleccionados}
-          buttonStyle={{backgroundColor:"#00b894"}}
-        />
+      {checkedItems && checkedItems.length > 0 ?
+        (
+          <View style={{ alignSelf: "center", width: "80%", bottom: 10 }}>
+            <Button
+              title="Guardar Equipo"
+              onPress={onbtenerEmpleadosSeleccionados}
+              buttonStyle={{ backgroundColor: "#00b894" }}
+            />
 
-      </View>
+          </View>
 
-      )
-      :null}
+        )
+        : null}
     </View>
   )
 }
@@ -153,7 +176,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: '#EBEBEB',
     paddingVertical: 10,
-    backgroundColor:"rgba(255, 255, 255,0.7)"
+    backgroundColor: "rgba(255, 255, 255,0.7)"
 
   },
   formContent: {
@@ -209,7 +232,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 4,
-  
+
   },
   cardContent: {
     flexDirection: 'row',

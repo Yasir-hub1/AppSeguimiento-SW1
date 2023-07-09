@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, FlatList, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, RefreshControl, FlatList, Image, TouchableOpacity } from 'react-native';
 import { listarCamiones } from '../../Services/AuthService';
 import { Button, CheckBox } from 'react-native-elements';
+import { showToast } from '../funciones';
 
 const ListaDeCamiones = ({navigation, setObtenerCamion }) => {
 
-  const [searchText, setSearchText] = useState('');
   const [listCamiones, setlistCamiones] = useState([])
+  const [refreshing, setRefreshing] = useState(false);
 
   const [checkedItem, setCheckedItem] = useState(null);
 
@@ -40,6 +41,8 @@ const ListaDeCamiones = ({navigation, setObtenerCamion }) => {
 
   }
 
+
+
   const obtenerCamion = () => {
     if (checkedItem) {
       setObtenerCamion(checkedItem);
@@ -53,6 +56,22 @@ const ListaDeCamiones = ({navigation, setObtenerCamion }) => {
   useEffect(() => {
     listarCamniones();
   }, [])
+
+
+  //Actualiza la lista de los CAMIONES
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      const listCamiones = await listarCamiones();
+      setlistCamiones(listCamiones);
+      showToast("Cargando...", "#2ecc71")
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -87,23 +106,17 @@ const ListaDeCamiones = ({navigation, setObtenerCamion }) => {
     </TouchableOpacity>
   );
 
-  /*  const filteredData = propertyData.filter((item) => {
-     return item.placa.toLowerCase().includes(searchText.toLowerCase());
-   }); */
+ 
 
   return (
     <View style={styles.container}>
-      {/*  <View style={styles.searchInputContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search properties..."
-          onChangeText={handleSearch}
-          value={searchText}
-        />
-      </View> */}
+     
       <FlatList
         contentContainerStyle={styles.propertyListContainer}
         data={listCamiones}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
