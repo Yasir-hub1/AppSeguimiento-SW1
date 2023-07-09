@@ -21,7 +21,18 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyC2iKcRjgOKH2Kzv1hqSCM18wan1a1cr68"
+        }
+      },
+      "permissions": [
+        "LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.ryac.basura.inteligente"
     },
     "web": {
       "favicon": "./assets/favicon.png"
