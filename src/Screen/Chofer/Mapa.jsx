@@ -130,7 +130,7 @@ const Mapa = ({ route, navigation }) => {
       console.log("front ", resp)
       if (status === "Success") {
         navigation.navigate('Inicio', { empleado: [], camion: [] });
-        showToast("Se registro correctamente", "#2ecc71");
+        showToast("Se registró correctamente", "#2ecc71");
         console.log("ENVIA ", status)
       }
     } catch (error) {

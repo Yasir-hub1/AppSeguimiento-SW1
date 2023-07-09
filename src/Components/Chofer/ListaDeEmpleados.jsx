@@ -1,6 +1,6 @@
 
 import { listaEmpleados } from '../../Services/AuthService'
-import React, { Component, useState, useEffect } from 'react'
+import React, { Component, useState, useEffect, useLayoutEffect } from 'react'
 import {
   StyleSheet,
   Text,
@@ -12,8 +12,9 @@ import {
   FlatList,
 } from 'react-native'
 import { Button, CheckBox } from 'react-native-elements';
+import { showToast } from '../funciones';
 
-const ListaDeEmpleados = ({ setEmpleadosSeleccionados }) => {
+const ListaDeEmpleados = ({ navigation,setEmpleadosSeleccionados }) => {
   const [obtenerEmpleado, setObtenerEmpleado] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
 
@@ -43,12 +44,19 @@ const ListaDeEmpleados = ({ setEmpleadosSeleccionados }) => {
 
   const onbtenerEmpleadosSeleccionados = () => {
 
-    const checkboxesSeleccionados = checkedItems
+   
+      const checkboxesSeleccionados = checkedItems
       .filter((item) => item.isChecked)
       .map((item) => item.id);
     // Hacer la solicitud HTTP a la API con los IDs de los checkboxes seleccionados
-    setEmpleadosSeleccionados(checkboxesSeleccionados);
+       if(checkboxesSeleccionados.length>0){
+         setEmpleadosSeleccionados(checkboxesSeleccionados);
+
+       }else{
+        showToast("Por favor elige al menos un empleado","#ff7f50")
+       }
     console.log('IDs de checkboxes', checkboxesSeleccionados);
+   
 
   };
 
@@ -57,6 +65,17 @@ const ListaDeEmpleados = ({ setEmpleadosSeleccionados }) => {
   useEffect(() => {
     listarEmpleados()
   }, [])
+
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => (
+        <View>
+          <Text style={{fontSize:22,fontWeight:"700",color:"#00b894"}}>Empleados</Text>
+        </View>
+      ),
+    });
+  }, [navigation]);
 
 
   return (
@@ -132,8 +151,9 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#EBEBEB',
+    // backgroundColor: '#EBEBEB',
     paddingVertical: 10,
+    backgroundColor:"rgba(255, 255, 255,0.7)"
 
   },
   formContent: {
@@ -183,7 +203,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderTopWidth: 40,
     marginBottom: 10,
-    borderRadius: 10
+    borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 4,
+  
   },
   cardContent: {
     flexDirection: 'row',

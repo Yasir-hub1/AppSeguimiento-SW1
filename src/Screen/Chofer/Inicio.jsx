@@ -49,11 +49,13 @@ const Inicio = ({ navigation }) => {
           id_empleado: empleadosSeleccionados,
           id_camion: obtenerCamion,
         };
-        const resp = await registrarEquipo(data);
-        if (resp === "ok") {
-          navigation.navigate("Rutas");
-        }
-        console.log("enviando REG ", data);
+      
+          const resp = await registrarEquipo(data);
+          if (resp === "ok") {
+            navigation.navigate("Rutas");
+          }
+          console.log("enviando REG ", data);
+
        
         
       }
@@ -76,12 +78,13 @@ const Inicio = ({ navigation }) => {
       {empleadosSeleccionados && empleadosSeleccionados.length > 0
 
         ? (
-          <ListaDeCamiones setObtenerCamion={setObtenerCamion} />
+          <ListaDeCamiones  navigation={navigation} setObtenerCamion={setObtenerCamion} />
         ) :
 
           (
             <View style={{ flex: 1, marginTop: -40 }}>
               <ListaDeEmpleados
+              navigation={navigation}
                 setEmpleadosSeleccionados={setEmpleadosSeleccionados}
               />
             </View>

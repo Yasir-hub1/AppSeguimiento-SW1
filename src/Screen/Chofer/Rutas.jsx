@@ -95,13 +95,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 50,
+        backgroundColor:"#fff"
 
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 16,
-        marginLeft: 16
+        marginLeft: 16,
+        color:"#00b894"
     },
     card: {
         flex: 1,
@@ -139,6 +141,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+      
     },
     timelineContainer: {
         width: 30,

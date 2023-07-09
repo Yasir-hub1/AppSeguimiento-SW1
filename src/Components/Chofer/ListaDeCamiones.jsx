@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, FlatList, Image, TouchableOpacity } from 'react-native';
 import { listarCamiones } from '../../Services/AuthService';
 import { Button, CheckBox } from 'react-native-elements';
 
-const ListaDeCamiones = ({ setObtenerCamion }) => {
-  
+const ListaDeCamiones = ({navigation, setObtenerCamion }) => {
+
   const [searchText, setSearchText] = useState('');
   const [listCamiones, setlistCamiones] = useState([])
 
@@ -41,13 +41,28 @@ const ListaDeCamiones = ({ setObtenerCamion }) => {
   }
 
   const obtenerCamion = () => {
-    setObtenerCamion(checkedItem);
+    if (checkedItem) {
+      setObtenerCamion(checkedItem);
+
+    } else {
+      showToast("Por favor elige un camion", "#ff7f50")
+    }
     console.log("enviando Camion");
   }
 
   useEffect(() => {
     listarCamniones();
   }, [])
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => (
+        <View>
+          <Text style={{fontSize:22,fontWeight:"700",color:"#00b894"}}>Camiones</Text>
+        </View>
+      ),
+    });
+  }, [navigation]);
 
 
   const renderItem = ({ item }) => (
@@ -92,16 +107,22 @@ const ListaDeCamiones = ({ setObtenerCamion }) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
-        <View style={{ alignSelf: "center", width: "80%", bottom: 10 }}>
-      <Button
-        title="Enviar"
-        onPress={() => obtenerCamion()}
-        buttonStyle={{backgroundColor:"#00b894"}}
+      <View style={{ alignSelf: "center", width: "80%", bottom: 10 }}>
 
-      />
+        {checkedItem ? (
 
-        </View>
-      
+          <Button
+            title="Enviar"
+            onPress={() => obtenerCamion()}
+            buttonStyle={{ backgroundColor: "#00b894" }}
+
+          />
+        ) : null
+
+        }
+
+      </View>
+
     </View>
   );
 }
@@ -109,7 +130,7 @@ const ListaDeCamiones = ({ setObtenerCamion }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10,
+    // paddingTop: 3,
   },
   searchInputContainer: {
     paddingHorizontal: 20,
@@ -125,6 +146,7 @@ const styles = StyleSheet.create({
   },
   propertyListContainer: {
     paddingHorizontal: 20,
+    backgroundColor:"#fff",
   },
   card: {
     backgroundColor: '#fff',
