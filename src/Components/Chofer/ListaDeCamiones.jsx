@@ -67,7 +67,7 @@ const ListaDeCamiones = ({navigation, setObtenerCamion }) => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card}>
-      <Image source={require('../../Assets/image/camion.png')} style={styles.image} />
+      <Image source={{uri:item.image}} style={styles.image} />
       <View style={[styles.cardBody]}>
         <Text style={styles.nombreVehiculo}>{item.nombre}</Text>
         <Text style={styles.placa}>{item.placa}</Text>

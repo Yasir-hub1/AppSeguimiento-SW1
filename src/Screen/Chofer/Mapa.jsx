@@ -124,6 +124,7 @@ const Mapa = ({ route, navigation }) => {
         horaIni: horaInicio,
         horaFin: obtenerHoraActual(),
         coordenadas: coordenadasAcumuladas,
+        id_ruta:id_ruta
       }
       const resp = await guardarRecorridoDelChofer(data);
       const { status } = resp;
@@ -202,19 +203,21 @@ const Mapa = ({ route, navigation }) => {
           <View style={styles.cardContainer}>
             <View style={styles.cardRow}>
               <View style={styles.cardField}>
-                <Text style={styles.fieldText}>Ruta:{datosDeLaRuta.nombreRuta} </Text>
+                <Text style={styles.fieldText}>Ruta: </Text>
               </View>
               <View style={styles.cardField}>
-                <Text style={styles.fieldText}>Horario:{datosDeLaRuta.hora_inicio} - {datosDeLaRuta.hora_fin}</Text>
+                <Text style={styles.fieldText}>{datosDeLaRuta.nombreRuta} </Text>
               </View>
+
             </View>
             <View style={styles.cardRow}>
               <View style={styles.cardField}>
-                <Text style={styles.fieldText}>Distrito: {datosDeLaRuta.nombreDistrito}</Text>
+                <Text style={styles.fieldText}>Horario:</Text>
               </View>
               <View style={styles.cardField}>
-                <Text style={styles.fieldText}>Zona:{datosDeLaRuta.nombreZona} </Text>
+                <Text style={styles.fieldText}>{datosDeLaRuta.hora_inicio} - {datosDeLaRuta.hora_fin}</Text>
               </View>
+
 
             </View>
           </View>
@@ -251,7 +254,7 @@ const styles = StyleSheet.create({
     left: 16,
     right: 16,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     backgroundColor: 'rgba(255, 255, 255,1.0)',
     borderRadius: 13,
     padding: 16,
@@ -268,7 +271,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   fieldText: {
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: 'bold',
   },
   buttonContainer: {

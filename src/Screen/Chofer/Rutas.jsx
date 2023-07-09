@@ -43,7 +43,7 @@ const Rutas = ({navigation}) => {
                     <Text style={[styles.cardTitle, { fontWeight: "800" }]}>{item.nombreRuta}</Text>
                     <Text style={styles.cardBody}>Horarios: {item.hora_inicio} - {item.hora_fin}</Text>
                     <Text style={styles.cardBody}>Dias: {item.dia_semana}</Text>
-                    <Text style={styles.cardBody}>Distrito: {item.nombreDistrito}</Text>
+                    {/* <Text style={styles.cardBody}>Distrito: {item.nombreDistrito}</Text> */}
                     <Text style={styles.cardBody}>Zona: {item.nombreZona}</Text>
 
                     <CheckBox
