@@ -8,7 +8,6 @@ import TrazarRuta from '../../Components/Chofer/Mapa/TrazarRuta';
 
 
 
-let foregroundSubscription = null;
 
 const Mapa = ({ route, navigation }) => {
   const { id_ruta, dataRuta } = route.params;
@@ -18,7 +17,6 @@ const Mapa = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [coordenadasAcumuladas, setCoordenadasAcumuladas] = useState([]);
   const [horaInicio, setHoraInicio] = useState(obtenerHoraActual);
-  const [fechaHora, setFechaHora] = useState(obtenerFechaHoraActual);
   const [datosDeLaRuta, setdatosDeLaRuta] = useState(dataRuta);
   const [coordOrigen, setCoordOrigen] = useState(null)
   const [CoorDestino, setCoorDestino] = useState(null)
@@ -31,12 +29,12 @@ const Mapa = ({ route, navigation }) => {
     obtenerCoordenadasApi();
 
   }, []);
-  console.log("origen ", JSON.parse(origen))
+  // console.log("origen ", JSON.parse(origen))
 
   const obtenerCoordenadasApi = async () => {
     try {
       const obtenerCoord = await obtenerCoordenadaDeLaRuta(id_ruta);
-      console.log("resp COORD FRONT", obtenerCoord);
+      // console.log("resp COORD FRONT", obtenerCoord);
 
       const coordenadas = JSON.parse(obtenerCoord[0].coordenadas)
 
@@ -81,17 +79,21 @@ const Mapa = ({ route, navigation }) => {
 
 
   //TODO: OBTENER UBICACION 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== 'granted') {
+        console.log('Se requieren permisos de ubicación');
+        return;
+      }
+    })()
+  }, [])
 
 
   useEffect(() => {
     const obtenerUbicacion = async () => {
       try {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-
-        if (status !== 'granted') {
-          console.log('Se requieren permisos de ubicación');
-          return;
-        }
 
         const { coords } = await Location.getCurrentPositionAsync();
         const nuevaCoordenada = {
@@ -106,7 +108,7 @@ const Mapa = ({ route, navigation }) => {
       }
     };
 
-    const interval = setInterval(obtenerUbicacion, 30000);
+    const interval = setInterval(obtenerUbicacion, 15000);
     console.log("enviando Coord ", coordenadasAcumuladas)
     return () => {
       clearInterval(interval);
@@ -120,11 +122,11 @@ const Mapa = ({ route, navigation }) => {
 
     try {
       let data = {
-        fechaHora: fechaHora,
+        fechaHora: obtenerFechaHoraActual(),
         horaIni: horaInicio,
         horaFin: obtenerHoraActual(),
         coordenadas: coordenadasAcumuladas,
-        id_ruta:id_ruta
+        id_ruta: id_ruta
       }
       const resp = await guardarRecorridoDelChofer(data);
       const { status } = resp;

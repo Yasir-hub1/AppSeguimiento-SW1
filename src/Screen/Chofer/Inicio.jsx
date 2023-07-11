@@ -2,21 +2,22 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import ListaDeEmpleados from "../../Components/Chofer/ListaDeEmpleados";
 import ListaDeCamiones from "../../Components/Chofer/ListaDeCamiones";
-import { registrarEquipo } from "../../Services/AuthService";
+import { logout, registrarEquipo } from "../../Services/AuthService";
 import { showToast } from "../../Components/funciones";
-import { ActivityLoader } from "../../Components/Shared";
-import Rutas from "./Rutas";
 import { useRoute } from '@react-navigation/native'
 
 const Inicio = ({ navigation }) => {
+ 
   const route = useRoute();
  
   const {empleado,camion}=route.params ? route.params : {};
+  
   console.log("--DEVUELTA ----",route);
   const [empleadosSeleccionados, setEmpleadosSeleccionados] = useState([]);
   const [obtenerCamion, setObtenerCamion] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
+  
 
   // console.log("setEmpleadosSeleccionadosINICIO", empleadosSeleccionados);
   console.log("obtenerCamion", obtenerCamion);
@@ -27,7 +28,7 @@ const Inicio = ({ navigation }) => {
         <TouchableOpacity
           style={{
             backgroundColor: "#00b894",
-            padding: 10,
+            padding: 8,
             borderRadius: 5,
             alignItems: "center",
           }}
@@ -38,8 +39,10 @@ const Inicio = ({ navigation }) => {
           <Text style={{ color: "#fff" }}>Reasignar</Text>
         </TouchableOpacity>
       ),
+     
     });
   }, []);
+
 
   useEffect(() => {
     (async () => {

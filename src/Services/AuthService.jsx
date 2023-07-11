@@ -47,6 +47,7 @@ export async function logout() {
         let res = await axios.post("logout");
         await deleteItemAsync(USER_TOKEN_KEY);
         await deleteItemAsync(USER_KEY);
+        await AsyncStorage.removeItem("id_equipo");
         return res.data;
     } catch (e) {
         throw errorHandler(e);

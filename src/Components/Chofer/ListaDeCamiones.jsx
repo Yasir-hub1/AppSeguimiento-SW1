@@ -76,7 +76,7 @@ const ListaDeCamiones = ({navigation, setObtenerCamion }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <View>
+        <View style={{textAlign:"center",alignSelf:"center",padding:8 }}>
           <Text style={{fontSize:22,fontWeight:"700",color:"#00b894"}}>Camiones</Text>
         </View>
       ),

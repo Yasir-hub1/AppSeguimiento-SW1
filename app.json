@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "AppSeguimiento",
-    "slug": "AppSeguimiento",
-    "version": "1.0.0",
+    "name": "Smart-Trucks",
+    "slug": "Smart-Trucks",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2ecc71"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -36,6 +36,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "23106d70-87c8-454b-8da8-47799eb29739"
+      }
     }
   }
 }

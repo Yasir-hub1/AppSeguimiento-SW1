@@ -73,9 +73,10 @@ const ListaDeEmpleados = ({ navigation, setEmpleadosSeleccionados }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      
       headerTitle: () => (
-        <View>
-          <Text style={{ fontSize: 22, fontWeight: "700", color: "#00b894" }}>Empleados</Text>
+        <View style={{textAlign:"center",alignSelf:"center",padding:8 }}>
+          <Text style={{ fontSize: 22, fontWeight: "700", color: "#00b894"}}>Empleados</Text>
         </View>
       ),
     });

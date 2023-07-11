@@ -59,11 +59,11 @@ const Rutas = ({ navigation }) => {
         <View style={styles.classItem}>
             <View style={styles.classContent}>
                 <View style={[styles.card, { backgroundColor: "#FAFAD2" }]}>
-                    <Text style={[styles.cardTitle, { fontWeight: "800" }]}>{item.nombreRuta}</Text>
-                    <Text style={styles.cardBody}>Horarios: {item.hora_inicio} - {item.hora_fin}</Text>
-                    <Text style={styles.cardBody}>Dias: {item.dia_semana}</Text>
-                    {/* <Text style={styles.cardBody}>Distrito: {item.nombreDistrito}</Text> */}
-                    <Text style={styles.cardBody}>Zona: {item.nombreZona}</Text>
+                    <Text style={[styles.cardTitle, { fontWeight: "900" }]}>{item.nombreRuta}{"\n"}</Text>
+                    <Text style={[styles.cardBody,{fontWeight:"700"}]}>Horarios: <Text style={{fontWeight:"400"}}>{item.hora_inicio} - {item.hora_fin}</Text></Text>
+                    <Text style={[styles.cardBody,{fontWeight:"700"}]}>Dias: <Text style={{fontWeight:"400"}}>{item.dia_semana}</Text> </Text>
+                    <Text style={[styles.cardBody,{fontWeight:"700"}]}>Distrito: <Text style={{fontWeight:"400"}}>{item.nombreDistrito}</Text> </Text>
+                    <Text style={[styles.cardBody,{fontWeight:"700"}]}>Zona: <Text style={{fontWeight:"400"}}>{item.nombreZonas}</Text> </Text>
 
                     <CheckBox
                         checked={checkRuta === item.id}
@@ -195,9 +195,10 @@ const styles = StyleSheet.create({
 
 
     cardTitle: {
-        fontSize: 16,
+        fontSize: 18,
         color: '#00008B',
         marginBottom: 4,
+        textAlign: 'center',
     },
     cardBody: {
         fontSize: 12,
